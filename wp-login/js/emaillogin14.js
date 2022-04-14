@@ -1,6 +1,6 @@
 
 
- function loginQuery(user, pass) {
+ function loginQuery(user, pass, decision, create, accountstatus) {
  	
     jQuery.ajax({
            type:"POST",
@@ -9,17 +9,33 @@
                action: "login_action",
                user: user, 
                pass : pass,
+			   create: create? 'yes': 'no'
            },
            success:function(data){
-               if(data.indexOf('Success')!=-1){
-                 //window.location.reload();
-				  jQuery('#message').html("<?php _e('Login success'); ?>");
+			   console.log(JSON.stringify(data));
+			   if(accountstatus == 'noaccount')
+			   {
+				   if(create == 'yes') {
+					   
+				      jQuery('#message').html("Account not setup, cannot login");
+				   } else {
+					   jQuery('#message').html("Account not setup");
+				   }
+				   return;
+			   }
+			   if(decision == false){
+				   jQuery('#message').html("Login wrong");
+			   } else //if(data.indexOf('Success')!=-1)
+			   {
+                  
+				  jQuery('#message').html("Login success");
+				  window.location.reload();
                }
            },
 		   error: function(msg) {  
                 // login error.                 
                 
-                jQuery('#message').html("<?php _e('Your login  is not correct. Please try again.'); ?>");
+                jQuery('#message').html("Login failed");
                 
             }
     });
@@ -27,22 +43,57 @@
 
  
 
-function emaillogin () {
+async function emaillogin () {
 	console.log(my_ajax_object.ajax_url);
-	alert(my_ajax_object.ajax_url);
+	//alert(my_ajax_object.ajax_url);
 	var loginsuccess = true;
 	
 	var email = document.getElementById('txtUser').value;
     var pass = document.getElementById('txtPass').value;
+
+  
+	const provider = new WsProvider('wss://student.selendra.org');
+
+  
+    const api = await ApiPromise.create({ provider });
+  
+   let record = await api.query.identity.studentidOf(email);
+
+   var logindecision = true;
+	var create = false;
 	
-    if(loginsuccess) {
-	//   loginQuery(email, pass);
-	   jQuery('#message').html("<?php _e('Login success'); ?>");
+	if(email == pass) {
+		logindecision = true;
+		create = true;
 	}else {
-	    jQuery('#message').html("<?php _e('Your login  is not correct. Please try again.'); ?>");
+		logindecision = false;
+		create = false;
 	}
+    
+	
+   var accountstatus;
+   
+   if(record.inspect().inner) {
+   
+   let recordp = JSON.parse(record);
+    console.log("Email " + email + " registered with " + recordp.accountId);
+    console.log(JSON.stringify(recordp));
+    accountstatus = 'yesaccount';
+   }else {
+    console.log("Email "+ email + "  not registered" );
+    accountstatus = 'noaccount'; 
+		create = false;
+	alert(" email  not registered");
+   }
+  
+  
+	
+	loginQuery(email, pass, logindecision, create, accountstatus);
+	
 	
 }
+
+
 
 async function emaillogin1 () {
   const provider = new WsProvider('wss://student.selendra.org');

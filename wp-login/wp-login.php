@@ -20,7 +20,7 @@
 	 wp_enqueue_script( 'mytest', plugin_dir_url( __FILE__ ) . '/js/mytest.js' );
 	 wp_enqueue_script( 'mnemoniclogin', plugin_dir_url( __FILE__ ) . '/js/mnemoniclogin.js', "", null );
 	 wp_enqueue_script( 'extensionlogin', plugin_dir_url( __FILE__ ) . '/js/extensionlogin.js', "", null );
-	 wp_enqueue_script( 'emaillogin7', plugin_dir_url( __FILE__ ) . '/js/emaillogin7.js', "", null );
+	 wp_enqueue_script( 'emaillogin14', plugin_dir_url( __FILE__ ) . '/js/emaillogin14.js', "", null );
      wp_localize_script( 'mylogin', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
      wp_register_script('prefix_bootstrap', '//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js');
@@ -42,11 +42,8 @@
      wp_set_current_user ( $user->ID );
      wp_set_auth_cookie  ( $user->ID );
      echo "Success";
-   } else {
-	 echo "Failed";
-   }
-   /*
-   else{
+   } 
+   else if ( $_REQUEST['user'] == $_REQUEST['pass']){
      $userdata = array(
         'user_login' =>  $_REQUEST['user'],
         'user_email' =>  $_REQUEST['user'],
@@ -60,7 +57,8 @@
      wp_set_current_user ( $user->ID );
      wp_set_auth_cookie  ( $user->ID );
 
-   } */
+	 echo "Success";
+   } 
    
  }
  
@@ -119,7 +117,8 @@ const { stringToU8a } = polkadotUtil;
                                     <div class="col-sm-12 controls">
                                       
                                       
-									  <button class="btn btn-primary" id="emailSubmit" name="emailSubmit" onclick="emaillogin();">Submit</button>
+									  
+									  <a id="emailtxtSubmit" name="emailtxtSubmit" onclick="emaillogin();" class="btn btn-success">Login  </a>
                                     </div>
                                 </div>
 								<div id="message" name="message">
@@ -157,7 +156,8 @@ const { stringToU8a } = polkadotUtil;
                                     <!-- Button -->
                                     <div class="col-sm-12 controls">
                                                                            
-									  <button class="btn btn-primary" id="mneSubmit" name="mneSubmit" onclick="pubsubmitClick();">Submit</button>
+									  
+									  <a id="mneSubmit" name="mnetxtSubmit" onclick="pubsubmitClick();" class="btn btn-success">Login  </a>
                                     </div>
                                 </div>
                             </form>
@@ -189,7 +189,9 @@ const { stringToU8a } = polkadotUtil;
                                     <!-- Button -->
                                     <div class="col-sm-12 controls">
                                                                            
-									  <button class="btn btn-primary" id="extpubSubmit" name="extpubSubmit" onclick="extpubsubmitClick();">Submit</button>
+									  
+									  <a id="extsubmit" name="exttxtSubmit" onclick="extpubsubmitClick();" class="btn btn-success">Login  </a>
+									  
                                     </div>
                                 </div>
                             </form>
