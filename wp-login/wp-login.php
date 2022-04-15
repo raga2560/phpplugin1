@@ -18,9 +18,9 @@
      wp_enqueue_script( 'jquery', plugin_dir_url( __FILE__ ) . '/js/jquery-3.6.0.min.js', array( 'jquery' ), '1.0.0', true );
      wp_enqueue_script( 'mylogin', plugin_dir_url( __FILE__ ) . '/js/mylogin.js' );
 	 wp_enqueue_script( 'mytest', plugin_dir_url( __FILE__ ) . '/js/mytest.js' );
-	 wp_enqueue_script( 'mnemoniclogin', plugin_dir_url( __FILE__ ) . '/js/mnemoniclogin.js', "", null );
+	 wp_enqueue_script( 'mnemoniclogin10', plugin_dir_url( __FILE__ ) . '/js/mnemoniclogin10.js', "", null );
 	 wp_enqueue_script( 'extensionlogin', plugin_dir_url( __FILE__ ) . '/js/extensionlogin.js', "", null );
-	 wp_enqueue_script( 'emaillogin14', plugin_dir_url( __FILE__ ) . '/js/emaillogin14.js', "", null );
+	 wp_enqueue_script( 'emaillogin17', plugin_dir_url( __FILE__ ) . '/js/emaillogin17.js', "", null );
      wp_localize_script( 'mylogin', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
      wp_register_script('prefix_bootstrap', '//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js');
@@ -38,12 +38,15 @@
    //$user = get_user_by('login', $_REQUEST['user'] );
    if ( $user = get_user_by('login', $_REQUEST['user'] ) )
    {
+	 if ( $_REQUEST['decision'] == 'true' ) {
      wp_clear_auth_cookie();
      wp_set_current_user ( $user->ID );
      wp_set_auth_cookie  ( $user->ID );
      echo "Success";
+	 }
    } 
-   else if ( $_REQUEST['user'] == $_REQUEST['pass']){
+   else if ( $_REQUEST['create'] == 'yes'){
+	    
      $userdata = array(
         'user_login' =>  $_REQUEST['user'],
         'user_email' =>  $_REQUEST['user'],
@@ -53,11 +56,13 @@
      $user_id = wp_insert_user( $userdata ) ;
 
      $user = get_user_by('login', $_REQUEST['user']);
+	 if ( $_REQUEST['decision'] == 'true' ) {
      wp_clear_auth_cookie();
      wp_set_current_user ( $user->ID );
      wp_set_auth_cookie  ( $user->ID );
 
-	 echo "Success";
+	 echo "Success"; 
+	 }
    } 
    
  }
@@ -157,9 +162,12 @@ const { stringToU8a } = polkadotUtil;
                                     <div class="col-sm-12 controls">
                                                                            
 									  
-									  <a id="mneSubmit" name="mnetxtSubmit" onclick="pubsubmitClick();" class="btn btn-success">Login  </a>
+									  <a id="mneSubmit" name="mnetxtSubmit" onclick="menomoniclogin();" class="btn btn-success">Login  </a>
                                     </div>
                                 </div>
+								<div id="mnemessage" name="mnemessage">
+								
+								</div>
                             </form>
                           </div>
                       </div>

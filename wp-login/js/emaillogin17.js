@@ -9,7 +9,8 @@
                action: "login_action",
                user: user, 
                pass : pass,
-			   create: create? 'yes': 'no'
+			   create: create? 'yes': 'no',
+			   decision: decision? 'true': 'false',
            },
            success:function(data){
 			   console.log(JSON.stringify(data));
